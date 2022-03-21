@@ -1,0 +1,28 @@
+org: crafter
+app: wordle-autosolver
+service: wordle-autosolver
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  environment:
+    EMAIL_DOMAIN: ${param:EMAIL_DOMAIN}
+    EMAIL_SENDER: ${param:EMAIL_SENDER}
+    EMAIL_TO: ${param:EMAIL_TO}
+    SENDGRID_API_KEY: ${param:SENDGRID_API_KEY}
+
+functions:
+  wordle:
+    handler: index.lambdaHandler
+    events:
+      - schedule: cron(0 23 * * ? *)
+
+plugins:
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
+  - serverless-plugin-chrome
+package:
+  excludeDevDependencies: false
+  individually: true
